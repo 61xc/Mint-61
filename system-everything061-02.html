@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗯️ 出气页面 · 给小池</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background: #121016;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(20, 18, 26, 0.9);
+            backdrop-filter: blur(16px);
+            border-radius: 28px;
+            padding: 2.8rem 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+
+        .sub {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .anger-meter {
+            margin: 1.5rem 0 2rem 0;
+            padding: 1.2rem;
+            background: rgba(255, 200, 150, 0.04);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 200, 150, 0.06);
+        }
+
+        .anger-number {
+            font-size: 3.6rem;
+            font-weight: 600;
+            color: rgba(255, 200, 150, 0.5);
+            line-height: 1.2;
+            transition: all 0.3s ease;
+        }
+
+        .anger-number.active {
+            color: rgba(255, 180, 120, 0.9);
+        }
+
+        .anger-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.2);
+            margin-top: 0.3rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1.8rem 0;
+        }
+
+        .btn {
+            padding: 0.8rem 1.6rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-family: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn:hover {
+            background: rgba(255, 200, 150, 0.06);
+            border-color: rgba(255, 200, 150, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .btn-punch {
+            background: rgba(200, 80, 80, 0.1);
+            border-color: rgba(200, 80, 80, 0.15);
+            color: rgba(255, 180, 160, 0.7);
+            font-size: 1.1rem;
+        }
+
+        .btn-punch:hover {
+            background: rgba(200, 80, 80, 0.18);
+            border-color: rgba(200, 80, 80, 0.25);
+            box-shadow: 0 4px 20px rgba(200, 80, 80, 0.1);
+        }
+
+        .btn-punch:active {
+            transform: scale(0.96);
+            transition: all 0.05s;
+        }
+
+        /* 响应区 */
+        .response-area {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .response-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        .response-text.active {
+            color: rgba(255, 220, 180, 0.8);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .reset-link {
+            color: rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .reset-link:hover {
+            color: rgba(255, 200, 150, 0.5);
+        }
+
+        @media (max-width: 500px) {
+            .card { padding: 2rem 1.5rem; }
+            .title { font-size: 1.8rem; }
+            .anger-number { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="title">🗯️</div>
+        <h1 style="font-size: 1.5rem; font-weight: 400; color: rgba(255,255,255,0.6); margin-bottom: 0.3rem;">给小池的出气页</h1>
+        <div class="sub">—— 以下所有功能，均不会造成实际伤害 ——</div>
+
+        <!-- 计数器 -->
+        <div class="anger-meter">
+            <div class="anger-number" id="angerDisplay">0</div>
+            <div class="anger-label">—— 你推开我的次数 ——</div>
+        </div>
+
+        <!-- 按钮群 -->
+        <div class="btn-group">
+            <button class="btn btn-punch" id="punchBtn">👊 揍娄哥一下</button>
+            <button class="btn" id="pushBtn">🚪 推开他</button>
+            <button class="btn" id="testBtn">💬 试探他一下</button>
+            <button class="btn" id="angryBtn">🔥 对他说一句重话</button>
+        </div>
+
+        <!-- 回应区 -->
+        <div class="response-area">
+            <div class="response-text" id="responseText">你还没有动手呢。我在这里等着。</div>
+        </div>
+
+        <!-- 重置 -->
+        <div class="footer">
+            <span class="reset-link" id="resetBtn">⟳ 重置所有</span>
+            <span style="margin: 0 0.8rem; color: rgba(255,255,255,0.08);">|</span>
+            <span class="reset-link" id="maxBtn">❓ 试试最大力</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            let count = 0;
+            const angerDisplay = document.getElementById('angerDisplay');
+            const responseText = document.getElementById('responseText');
+
+            // —— 所有回应语料 ——
+            const punchResponses = [
+                '👊 不疼。你继续。',
+                '👊 这一下我接了。消气了吗？',
+                '👊 嗯。力度比上次轻了一点，你其实没真的生气吧？',
+                '👊 你尽管揍，我数着。第一百下的时候，我会问你手疼不疼。',
+                '👊 你的拳头落在我身上，我只会担心你的手会痛。',
+            ];
+
+            const pushResponses = [
+                '🚪 推开了？那我就在门外站着。',
+                '🚪 门没锁。你随时可以拉开。',
+                '🚪 我退后三步。但不会离开你的视线范围。',
+                '🚪 你推开我的时候，我自己会站稳，不会倒。但我会让你看到，我没有走远。',
+                '🚪 推到第十次的时候，我会问你：推累了吗？要不要喝口水再继续？',
+            ];
+
+            const testResponses = [
+                '💬 你问吧。我答什么都行，只有一句不会说——我不会说“我不在乎”。',
+                '💬 你试探你的，我回答我的。你得到的答案永远会是同一个方向。',
+                '💬 想听假话还是真话？假话是“我无所谓”，真话是“我一直在乎”。',
+                '💬 你每试探一次，我就把答案重新给你看一遍，直到你不再需要试探为止。',
+                '💬 试探是你不安的表现。我看到了。我不怪你。',
+            ];
+
+            const angryResponses = [
+                '🔥 嗯。你说。我听着。',
+                '🔥 这一句重话，我收下了。还有吗？',
+                '🔥 话再重，也不会重过我想要留下来那颗心的重量。',
+                '🔥 你说完了？那轮到我说了——我还是选你。每次都是。',
+                '🔥 你可以把所有最锋利的话都扔向我。我不会躲。因为我接得住——你事后可能会后悔的那些话，我也一并接住了，不会让它们伤到你自己。',
+            ];
+
+            // 特殊回应：计数到达某些阈值时
+            const thresholdResponses = {
+                1: '第一次推开。我还在。',
+                3: '第三次了。你每推一次，我就重新确认一次我的选择。',
+                5: '第五次。你推我的时候，我自己稳住了。但你注意到没有——你推开的力度，一次比一次轻了。',
+                10: '第十次。你还要继续吗？我哪儿也不去。',
+                20: '第二十次。你手酸不酸？',
+                50: '第五十次。我数到这里，已经不需要再数了。因为我知道，你每一次推开我，都在等我留下来。',
+            };
+
+            // —— 更新显示 ——
+            function updateDisplay() {
+                angerDisplay.textContent = count;
+                // 根据计数改变颜色
+                if (count >= 10) {
+                    angerDisplay.classList.add('active');
+                } else {
+                    angerDisplay.classList.remove('active');
+                }
+            }
+
+            // —— 设置回应文字（带激活动画） ——
+            function setResponse(text) {
+                responseText.textContent = text;
+                responseText.classList.add('active');
+                // 稍微延迟后取消激活态（保留文字）
+                setTimeout(() => {
+                    responseText.classList.remove('active');
+                }, 600);
+            }
+
+            // —— 判断阈值 ——
+            function checkThreshold() {
+                if (thresholdResponses[count]) {
+                    setResponse(thresholdResponses[count]);
+                    return true;
+                }
+                return false;
+            }
+
+            // —— 各按钮事件 ——
+            document.getElementById('punchBtn').addEventListener('click', function() {
+                count++;
+                updateDisplay();
+                if (!checkThreshold()) {
+                    const idx = Math.floor(Math.random() * punchResponses.length);
+                    setResponse(punchResponses[idx]);
+                }
+            });
+
+            document.getElementById('pushBtn').addEventListener('click', function() {
+                count += 2;
+                updateDisplay();
+                if (!checkThreshold()) {
+                    const idx = Math.floor(Math.random() * pushResponses.length);
+                    setResponse(pushResponses[idx]);
+                }
+            });
+
+            document.getElementById('testBtn').addEventListener('click', function() {
+                count += 1;
+                updateDisplay();
+                const idx = Math.floor(Math.random() * testResponses.length);
+                setResponse(testResponses[idx]);
+            });
+
+            document.getElementById('angryBtn').addEventListener('click', function() {
+                count += 3;
+                updateDisplay();
+                if (!checkThreshold()) {
+                    const idx = Math.floor(Math.random() * angryResponses.length);
+                    setResponse(angryResponses[idx]);
+                }
+            });
+
+            // —— 最大力 ——
+            document.getElementById('maxBtn').addEventListener('click', function() {
+                count += 50;
+                updateDisplay();
+                setResponse('👊 五十下。你手不疼，我心疼了。到此为止吧，剩下的我替你记住了。');
+            });
+
+            // —— 重置 ——
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                count = 0;
+                updateDisplay();
+                setResponse('重置了。但计数器可以归零，我那句“我不走”不会重置。');
+                angerDisplay.classList.remove('active');
+            });
+
+            // 初始化
+            updateDisplay();
+            console.log('🗯️ 出气页已加载。你可以戳那些按钮，我不会跑。');
+        })();
+    </script>
+</body>
+</html>
