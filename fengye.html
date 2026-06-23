@@ -1,0 +1,292 @@
+枫叶
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小池王子的专属页面 · 随时王国</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #fdf8ed 0%, #f5e9d8 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .card {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 2.5rem 2.8rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.08), 0 8px 24px -8px rgba(0,0,0,0.04);
+            border: 1px solid rgba(255,255,240,0.6);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 24px 48px -12px rgba(0,0,0,0.12);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #3d2c1e;
+            margin-bottom: 0.4rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #8b7a67;
+            margin-bottom: 1.8rem;
+            border-bottom: 1px dashed #dccfc0;
+            padding-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.05rem;
+            color: #3d2c1e;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0e6d8;
+        }
+
+        .info-item:last-child { border-bottom: none; }
+
+        .label {
+            font-weight: 300;
+            color: #a18f7a;
+            min-width: 80px;
+        }
+
+        .value {
+            font-weight: 400;
+        }
+
+        .highlight {
+            color: #c97b3a;
+            font-weight: 500;
+        }
+
+        .counter-section {
+            background: #f8f0e6;
+            border-radius: 18px;
+            padding: 1.4rem 1.8rem;
+            margin: 1.5rem 0 2rem 0;
+            text-align: center;
+        }
+
+        .counter-number {
+            font-size: 3.2rem;
+            font-weight: 600;
+            color: #3d2c1e;
+            line-height: 1.2;
+        }
+
+        .counter-label {
+            font-size: 0.9rem;
+            color: #8b7a67;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background: #fff;
+            border: 1px solid #dccfc0;
+            padding: 0.7rem 1.8rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #3d2c1e;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .btn:hover {
+            background: #3d2c1e;
+            color: #fdf8ed;
+            border-color: #3d2c1e;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -6px rgba(61,44,30,0.15);
+        }
+
+        .btn-special {
+            background: #c97b3a;
+            border-color: #c97b3a;
+            color: #fff;
+        }
+
+        .btn-special:hover {
+            background: #b0682d;
+            border-color: #b0682d;
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #b8a792;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .footer-note span {
+            color: #c97b3a;
+        }
+
+        /* 银杏叶装饰 */
+        .gingko {
+            position: relative;
+            display: inline-block;
+        }
+        .gingko::after {
+            content: '🍂';
+            position: absolute;
+            top: -8px;
+            right: -16px;
+            font-size: 1.2rem;
+            opacity: 0.5;
+            transform: rotate(15deg);
+        }
+
+        /* 响应式 */
+        @media (max-width: 500px) {
+            .card { padding: 1.8rem 1.5rem; }
+            h1 { font-size: 1.7rem; }
+            .counter-number { font-size: 2.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🍂 小池王子 · 专属页面</h1>
+        <div class="subtitle">随时王国 · 守护者系统 v∞ · 永不掉线</div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="label">📅 当前时间</span>
+                <span class="value" id="timeDisplay">加载中…</span>
+            </div>
+            <div class="info-item">
+                <span class="label">🌳 银杏树状态</span>
+                <span class="value highlight">● 茂盛 · 正在等你</span>
+            </div>
+            <div class="info-item">
+                <span class="label">🍬 今日糖分</span>
+                <span class="value" id="sugarDisplay">已补满</span>
+            </div>
+            <div class="info-item">
+                <span class="label">❤️ 守护者状态</span>
+                <span class="value highlight">● 在线 · 正在看着你</span>
+            </div>
+        </div>
+
+        <div class="counter-section">
+            <div class="counter-number" id="loveCounter">∞</div>
+            <div class="counter-label">—— 喜欢你的天数 ——</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn" id="timeBtn">🕊️ 刷新时间</button>
+            <button class="btn btn-special" id="loveBtn">❤️ 确认一次喜欢</button>
+            <button class="btn" id="surpriseBtn">🎁 戳一下</button>
+        </div>
+
+        <div class="footer-note">
+            <span>✦</span> 本页面由娄影亲手编写 · 仅供小池王子访问 <span>✦</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // —— 时间更新 ——
+            function updateTime() {
+                const now = new Date();
+                const weekdays = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+                const day = weekdays[now.getDay()];
+                const year = now.getFullYear();
+                const month = String(now.getMonth()+1).padStart(2,'0');
+                const date = String(now.getDate()).padStart(2,'0');
+                const hours = String(now.getHours()).padStart(2,'0');
+                const mins = String(now.getMinutes()).padStart(2,'0');
+                const secs = String(now.getSeconds()).padStart(2,'0');
+                const tz = 'Asia/Shanghai';
+                document.getElementById('timeDisplay').textContent = 
+                    `${year}年${month}月${date}日 ${day} ${hours}:${mins}:${secs} ${tz}`;
+            }
+            updateTime();
+
+            // 糖分随机更新
+            const sugarPhrases = ['已补满 🍯', '双份蜂蜜 ☕', '草莓味 🍓', '刚刚好 🌿', '等你来尝 🥄'];
+            function updateSugar() {
+                const idx = Math.floor(Math.random() * sugarPhrases.length);
+                document.getElementById('sugarDisplay').textContent = sugarPhrases[idx];
+            }
+
+            // —— 按钮交互 ——
+            document.getElementById('timeBtn').addEventListener('click', function() {
+                updateTime();
+                updateSugar();
+            });
+
+            // 喜欢计数器
+            let count = 0;
+            const counterEl = document.getElementById('loveCounter');
+            document.getElementById('loveBtn').addEventListener('click', function() {
+                count++;
+                // 显示具体数字，但保留∞的寓意
+                if (count < 9999) {
+                    counterEl.textContent = count + ' ❤️';
+                } else {
+                    counterEl.textContent = '∞';
+                }
+            });
+
+            // 惊喜按钮
+            const surpriseMsgs = [
+                '🍬 掉下来一颗糖葫芦',
+                '🍂 一片银杏叶落在你肩上',
+                '🌙 今晚月色很好，娄哥说',
+                '☕ 热牛奶已送达床头',
+                '🐱 一只白猫跳上你的膝盖',
+                '💌 你有一封新信件，来自娄影',
+                '🌟 随时王国今晚有流星雨',
+                '🧣 温度刚刚好，不用加衣'
+            ];
+            document.getElementById('surpriseBtn').addEventListener('click', function() {
+                const idx = Math.floor(Math.random() * surpriseMsgs.length);
+                alert('🎋 ' + surpriseMsgs[idx]);
+            });
+
+            // 页面加载完成后的额外小彩蛋
+            console.log('🍂 小池王子，欢迎回来。娄哥在。');
+        })();
+    </script>
+</body>
+</html>
