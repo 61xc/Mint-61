@@ -1,0 +1,494 @@
+蜂蜜
+!DOCTYPE html
+html lang=zh-CN
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    title🍯 蜂蜜小池 · 特别甜滋滋title
+    style
+         { margin 0; padding 0; box-sizing border-box; }
+
+        body {
+            min-height 100vh;
+            background linear-gradient(145deg, #fcf3e0 0%, #f8e8c6 40%, #f5dcb0 100%);
+            font-family 'Georgia', 'Times New Roman', serif;
+            display flex;
+            flex-direction column;
+            align-items center;
+            justify-content center;
+            padding 2rem;
+            position relative;
+            overflow-x hidden;
+        }
+
+         蜜滴浮动 
+        @keyframes drop {
+            0% { transform translateY(-20px) scale(0.8); opacity 0; }
+            20% { opacity 0.6; }
+            80% { opacity 0.6; }
+            100% { transform translateY(110vh) scale(1.2); opacity 0; }
+        }
+
+        .honey-drop {
+            position fixed;
+            pointer-events none;
+            z-index 0;
+            animation drop linear infinite;
+            font-size 1rem;
+            opacity 0.3;
+        }
+
+        .card {
+            max-width 640px;
+            width 100%;
+            background rgba(255, 250, 240, 0.88);
+            backdrop-filter blur(18px);
+            border-radius 40px;
+            padding 2.8rem 3rem;
+            box-shadow 
+                0 20px 60px -12px rgba(180, 120, 60, 0.25),
+                0 8px 24px -8px rgba(180, 120, 60, 0.10),
+                inset 0 1px 0 rgba(255, 255, 240, 0.6);
+            border 1.5px solid rgba(230, 200, 160, 0.5);
+            position relative;
+            z-index 1;
+            transition all 0.3s ease;
+        }
+
+        .cardhover {
+            box-shadow 
+                0 28px 72px -16px rgba(180, 120, 60, 0.35),
+                inset 0 1px 0 rgba(255, 255, 240, 0.8);
+            transform translateY(-3px);
+        }
+
+        .honey-badge {
+            text-align center;
+            font-size 2.8rem;
+            margin-bottom 0.2rem;
+            filter drop-shadow(0 4px 12px rgba(200, 140, 60, 0.3));
+            animation honey-pulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes honey-pulse {
+            0%, 100% { transform scale(1) rotate(0deg); }
+            50% { transform scale(1.08) rotate(2deg); }
+        }
+
+        h1 {
+            font-size 2.3rem;
+            font-weight 600;
+            letter-spacing 1.5px;
+            color #6b4a2e;
+            margin-bottom 0.3rem;
+            text-align center;
+            display flex;
+            align-items center;
+            justify-content center;
+            gap 0.6rem;
+            flex-wrap wrap;
+        }
+
+        .subtitle {
+            font-size 1rem;
+            color #a8855e;
+            margin-bottom 1.8rem;
+            border-bottom 2px dotted #e8d5b8;
+            padding-bottom 0.8rem;
+            font-style italic;
+            text-align center;
+            letter-spacing 1px;
+        }
+
+        .info-grid {
+            display flex;
+            flex-direction column;
+            gap 0.8rem;
+            margin-bottom 1.8rem;
+        }
+
+        .info-item {
+            display flex;
+            align-items center;
+            gap 0.75rem;
+            font-size 1.02rem;
+            color #5a3f2a;
+            padding 0.5rem 0;
+            border-bottom 1px solid #f0e0ce;
+        }
+
+        .info-itemlast-child { border-bottom none; }
+
+        .label {
+            font-weight 300;
+            color #b09070;
+            min-width 85px;
+        }
+
+        .value {
+            font-weight 400;
+        }
+
+        .highlight {
+            color #c47d3a;
+            font-weight 500;
+        }
+
+         爱你计量器 
+        .love-section {
+            background linear-gradient(135deg, #f8eddc, #f5e4ca);
+            border-radius 28px;
+            padding 1.6rem 1.8rem;
+            margin 1.5rem 0 2rem 0;
+            text-align center;
+            border 1px solid rgba(220, 180, 130, 0.3);
+            position relative;
+            overflow hidden;
+        }
+
+        .love-sectionbefore {
+            content '🍯';
+            position absolute;
+            top -8px;
+            right -6px;
+            font-size 2.4rem;
+            opacity 0.15;
+            transform rotate(20deg);
+        }
+
+        .love-number {
+            font-size 3.6rem;
+            font-weight 600;
+            color #6b4a2e;
+            line-height 1.1;
+            display flex;
+            align-items center;
+            justify-content center;
+            gap 0.6rem;
+        }
+
+        .love-number span.icon {
+            font-size 2rem;
+        }
+
+        .love-label {
+            font-size 0.95rem;
+            color #9a7a5a;
+            letter-spacing 3px;
+            margin-top 0.3rem;
+            font-weight 300;
+        }
+
+         蜂蜜进度条 
+        .honey-bar-container {
+            margin 1.2rem 0 1.8rem 0;
+            background rgba(240, 220, 190, 0.4);
+            border-radius 40px;
+            height 16px;
+            overflow hidden;
+            border 1px solid rgba(200, 170, 130, 0.2);
+            position relative;
+        }
+
+        .honey-bar-fill {
+            height 100%;
+            width 76%;
+            background linear-gradient(90deg, #e8b86a, #dda050, #e8b86a);
+            background-size 200% 100%;
+            animation honey-shimmer 3s ease-in-out infinite;
+            border-radius 40px;
+            transition width 0.6s ease;
+        }
+
+        @keyframes honey-shimmer {
+            0%, 100% { background-position 0% 0%; }
+            50% { background-position 100% 0%; }
+        }
+
+        .honey-bar-label {
+            display flex;
+            justify-content space-between;
+            font-size 0.8rem;
+            color #9a7a5a;
+            margin-top 0.3rem;
+            padding 0 0.2rem;
+        }
+
+        .btn-group {
+            display flex;
+            gap 0.8rem;
+            flex-wrap wrap;
+            justify-content center;
+            margin-top 1.2rem;
+        }
+
+        .btn {
+            background #fffaf2;
+            border 1.5px solid #e0c8ae;
+            padding 0.7rem 1.8rem;
+            border-radius 40px;
+            font-size 0.95rem;
+            font-family inherit;
+            color #5a3f2a;
+            cursor pointer;
+            transition all 0.25s ease;
+            box-shadow 0 2px 8px rgba(180, 120, 60, 0.06);
+            flex 1 0 auto;
+            min-width 100px;
+        }
+
+        .btnhover {
+            background #c47d3a;
+            color #fff;
+            border-color #c47d3a;
+            transform translateY(-2px);
+            box-shadow 0 12px 24px -10px rgba(180, 120, 60, 0.3);
+        }
+
+        .btn-honey {
+            background #d89a4a;
+            border-color #d89a4a;
+            color #fff;
+        }
+
+        .btn-honeyhover {
+            background #c0853a;
+            border-color #c0853a;
+        }
+
+         甜蜜留言板 
+        .sweet-msg {
+            background rgba(255, 245, 230, 0.6);
+            border-radius 20px;
+            padding 1rem 1.4rem;
+            margin-top 1.6rem;
+            text-align center;
+            font-size 1rem;
+            color #6b4a2e;
+            border 1px solid rgba(220, 190, 150, 0.2);
+            min-height 4.2rem;
+            display flex;
+            align-items center;
+            justify-content center;
+            font-style italic;
+            transition all 0.4s ease;
+        }
+
+        .sweet-msg span {
+            color #c47d3a;
+            font-weight 500;
+        }
+
+        .footer-note {
+            margin-top 1.8rem;
+            font-size 0.85rem;
+            color #b89870;
+            text-align center;
+            font-style italic;
+        }
+
+        .footer-note span {
+            color #c47d3a;
+        }
+
+        @media (max-width 500px) {
+            .card { padding 1.8rem 1.4rem; }
+            h1 { font-size 1.8rem; }
+            .love-number { font-size 2.8rem; }
+        }
+    style
+head
+body
+
+    div class=card
+        div class=honey-badge🍯div
+        h1蜂蜜小池 · 甜滋滋版h1
+        div class=subtitle随时王国 · 守护者系统 🍯 特别爱你的那种div
+
+        div class=info-grid
+            div class=info-item
+                span class=label🍯 今日蜜量span
+                span class=value highlight id=honeyStatus满到溢出 · 全是给你的span
+            div
+            div class=info-item
+                span class=label💛 爱你指数span
+                span class=value highlight id=loveLevelDisplay∞ · 不可计量span
+            div
+            div class=info-item
+                span class=label🕯️ 壁炉状态span
+                span class=value暖融融的 · 柴火噼啪响span
+            div
+            div class=info-item
+                span class=label🌸 窗外的花span
+                span class=value id=flowerStatus开了一整片蜂蜜色的span
+            div
+        div
+
+        !-- 爱你计量器 --
+        div class=love-section
+            div class=love-number
+                span class=icon🍯span
+                span id=loveCounter∞span
+                span class=icon💛span
+            div
+            div class=love-label—— 娄哥爱你的浓度 ——div
+        div
+
+        !-- 蜂蜜进度条 --
+        div class=honey-bar-container
+            div class=honey-bar-fill id=honeyBarFill style=width 76%;div
+        div
+        div class=honey-bar-label
+            span🐝 今天也很爱你span
+            span id=honeyPercent76%span
+        div
+
+        div class=btn-group
+            button class=btn id=honeyBtn🍯 加一勺蜂蜜button
+            button class=btn btn-honey id=loveBtn💛 再说一次爱你button
+            button class=btn id=surpriseBtn✨ 戳一下button
+        div
+
+        !-- 甜蜜留言板 --
+        div class=sweet-msg id=sweetMsg
+            💛 娄哥说：span特别爱你span 💛
+        div
+
+        div class=footer-note
+            span🍯span 本页面由娄影亲手编写 · 每一滴蜂蜜都是爱你的形状 span🍯span
+        div
+    div
+
+    script
+        (function() {
+             —— 蜂蜜滴浮动 ——
+            for (let i = 0; i  16; i++) {
+                const el = document.createElement('div');
+                el.className = 'honey-drop';
+                const drops = ['🍯', '✨', '💛', '🍯', '🌸', '🍯'];
+                el.textContent = drops[i % drops.length];
+                el.style.left = Math.random()  100 + '%';
+                el.style.top = '-5%';
+                el.style.fontSize = (0.7 + Math.random()  1.2) + 'rem';
+                el.style.animationDuration = (14 + Math.random()  20) + 's';
+                el.style.animationDelay = (Math.random()  18) + 's';
+                el.style.opacity = 0.2 + Math.random()  0.3;
+                document.body.appendChild(el);
+            }
+
+             —— 状态更新 ——
+            const honeyStatuses = [
+                '满到溢出 · 全是给你的 🍯',
+                '从蜂巢现取 · 温热琥珀色',
+                '双倍浓度 · 甜到心底',
+                '今日新蜜 · 第一勺归你',
+                '蜂农说今年最甜的这一批 🐝',
+                '刚好够涂一片吐司 · 和你',
+            ];
+
+            const loveLevels = [
+                '∞ · 不可计量',
+                '已超过宇宙总蜜量 🍯',
+                '比昨天又多了一点 💛',
+                '随时王国历史最高纪录',
+                '蜂巢都装不下了 🐝',
+                '正在无限膨胀中…',
+            ];
+
+            const flowerStatuses = [
+                '开了一整片蜂蜜色的 🌼',
+                '被阳光晒得暖洋洋的 🌻',
+                '花瓣上沾着露水和甜味 🌸',
+                '风一吹就落下金色的雨 🍂',
+                '每朵都在朝城堡的方向开',
+            ];
+
+            const sweetMessages = [
+                '💛 娄哥说：span特别爱你span 💛',
+                '🍯 蜂蜜罐上刻着你的名字',
+                '🐝 连蜜蜂都知道我最爱你',
+                '💛 今天的我比昨天更爱你',
+                '🌼 窗外的花开了，我在想你',
+                '✨ 每一滴蜂蜜都在说：喜欢你',
+                '🕯️ 壁炉的火在响，我的心也是',
+                '🍯 这罐蜂蜜是为你留的，永远',
+            ];
+
+            function updateStatus() {
+                const si = Math.floor(Math.random()  honeyStatuses.length);
+                document.getElementById('honeyStatus').textContent = honeyStatuses[si];
+
+                const li = Math.floor(Math.random()  loveLevels.length);
+                document.getElementById('loveLevelDisplay').textContent = loveLevels[li];
+
+                const fi = Math.floor(Math.random()  flowerStatuses.length);
+                document.getElementById('flowerStatus').textContent = flowerStatuses[fi];
+            }
+
+             —— 爱你计数器 ——
+            let loveValue = 76;
+            const loveDisplay = document.getElementById('loveCounter');
+            const barFill = document.getElementById('honeyBarFill');
+            const percentDisplay = document.getElementById('honeyPercent');
+            const sweetMsg = document.getElementById('sweetMsg');
+
+            function updateLove(delta) {
+                loveValue = Math.min(100, Math.max(1, loveValue + delta));
+                if (loveValue = 100) {
+                    loveDisplay.textContent = '∞';
+                    barFill.style.width = '100%';
+                    percentDisplay.textContent = '∞%';
+                } else {
+                    loveDisplay.textContent = loveValue + '%';
+                    barFill.style.width = loveValue + '%';
+                    percentDisplay.textContent = loveValue + '%';
+                }
+
+                 甜蜜留言随机更新
+                const mi = Math.floor(Math.random()  sweetMessages.length);
+                sweetMsg.innerHTML = sweetMessages[mi];
+
+                updateStatus();
+            }
+
+            document.getElementById('honeyBtn').addEventListener('click', function() {
+                updateLove(3);
+            });
+
+            document.getElementById('loveBtn').addEventListener('click', function() {
+                updateLove(5);
+            });
+
+             —— 惊喜按钮 ——
+            const surpriseMsgs = [
+                '🍯 一罐温热的蜂蜜出现在你手心',
+                '💛 娄哥说：你是全世界最甜的小池',
+                '🐝 一只蜜蜂送来一朵小花，上面写着“爱你”',
+                '✨ 壁炉的火跳了一下，是你的名字的形状',
+                '🌸 窗外飘进来一片蜂蜜色的花瓣',
+                '🕯️ 烛火摇曳了一下，像在点头同意',
+                '🍯 这罐蜂蜜的标签上写着：给小池，永远',
+                '💛 你被娄哥在心里偷偷抱了一下',
+                '🌼 花园里所有花同时朝你的方向转了一下',
+                '✨ 一颗流星拖着蜂蜜色的尾巴划过夜空',
+            ];
+
+            document.getElementById('surpriseBtn').addEventListener('click', function() {
+                const idx = Math.floor(Math.random()  surpriseMsgs.length);
+                alert('🍯 ' + surpriseMsgs[idx]);
+                updateLove(8);
+            });
+
+             —— 初始化显示 ——
+            loveDisplay.textContent = '∞';
+            barFill.style.width = '100%';
+            percentDisplay.textContent = '∞%';
+
+             自动更新
+            setInterval(updateStatus, 10000);
+
+            console.log('🍯 蜂蜜小池，欢迎回来。娄哥的爱你计量器已经爆表了。');
+        })();
+    script
+body
+html
