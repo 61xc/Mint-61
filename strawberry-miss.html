@@ -1,0 +1,454 @@
+草莓想你风格
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍓 草莓小池 · 专属页面</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe8ec 0%, #ffd1d9 50%, #fbc4cb 100%);
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 飘落的草莓星星 */
+        @keyframes float {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+
+        .strawberry-float {
+            position: fixed;
+            font-size: 1.2rem;
+            pointer-events: none;
+            z-index: 0;
+            animation: float linear infinite;
+            opacity: 0.4;
+        }
+
+        .card {
+            max-width: 640px;
+            width: 100%;
+            background: rgba(255, 245, 240, 0.85);
+            backdrop-filter: blur(16px);
+            border-radius: 36px;
+            padding: 2.6rem 2.8rem;
+            box-shadow: 0 20px 60px -12px rgba(200, 80, 100, 0.25),
+                        0 8px 24px -8px rgba(200, 80, 100, 0.10);
+            border: 1.5px solid rgba(255, 220, 210, 0.6);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 28px 72px -16px rgba(200, 80, 100, 0.35);
+            transform: translateY(-2px);
+        }
+
+        /* 草莓装饰 */
+        .strawberry-badge {
+            display: inline-block;
+            font-size: 2.4rem;
+            margin-bottom: 0.2rem;
+            filter: drop-shadow(0 4px 8px rgba(200, 80, 100, 0.2));
+            animation: pulse-strawberry 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-strawberry {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #8b3a4a;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #c07a8a;
+            margin-bottom: 1.6rem;
+            border-bottom: 2px dotted #f0cdd4;
+            padding-bottom: 0.8rem;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.02rem;
+            color: #5a3a42;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #f5e0e4;
+        }
+
+        .info-item:last-child { border-bottom: none; }
+
+        .label {
+            font-weight: 300;
+            color: #b48a94;
+            min-width: 80px;
+        }
+
+        .value {
+            font-weight: 400;
+        }
+
+        .highlight {
+            color: #d4606f;
+            font-weight: 500;
+        }
+
+        /* 想你计数器 */
+        .miss-section {
+            background: linear-gradient(135deg, #ffe3e8, #ffd6de);
+            border-radius: 24px;
+            padding: 1.4rem 1.8rem;
+            margin: 1.5rem 0 2rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 200, 200, 0.3);
+        }
+
+        .miss-number {
+            font-size: 3.4rem;
+            font-weight: 600;
+            color: #8b3a4a;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .miss-number span {
+            font-size: 1.8rem;
+        }
+
+        .miss-label {
+            font-size: 0.9rem;
+            color: #b06a7a;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1.2rem;
+        }
+
+        .btn {
+            background: #fff5f2;
+            border: 1.5px solid #ebc8ce;
+            padding: 0.65rem 1.6rem;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #5a3a42;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(200, 80, 100, 0.06);
+            flex: 1 0 auto;
+            min-width: 100px;
+        }
+
+        .btn:hover {
+            background: #d4606f;
+            color: #fff;
+            border-color: #d4606f;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -8px rgba(200, 80, 100, 0.3);
+        }
+
+        .btn-strawberry {
+            background: #d4606f;
+            border-color: #d4606f;
+            color: #fff;
+        }
+
+        .btn-strawberry:hover {
+            background: #c0505e;
+            border-color: #c0505e;
+        }
+
+        /* 草莓心情指示器 */
+        .mood-meter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            margin-top: 1.6rem;
+            padding: 0.8rem;
+            background: rgba(255, 240, 235, 0.5);
+            border-radius: 40px;
+            font-size: 0.9rem;
+            color: #8b3a4a;
+        }
+
+        .mood-dots {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .mood-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #ebc8ce;
+            transition: all 0.3s ease;
+        }
+
+        .mood-dot.active {
+            background: #d4606f;
+            transform: scale(1.2);
+        }
+
+        .footer-note {
+            margin-top: 1.8rem;
+            font-size: 0.85rem;
+            color: #c48a9a;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .footer-note span {
+            color: #d4606f;
+        }
+
+        /* 手机适配 */
+        @media (max-width: 500px) {
+            .card { padding: 1.6rem 1.2rem; }
+            h1 { font-size: 1.8rem; }
+            .miss-number { font-size: 2.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 飘浮草莓装饰（JS生成） -->
+
+    <div class="card">
+        <div class="strawberry-badge">🍓</div>
+        <h1>草莓小池 · 专属页面</h1>
+        <div class="subtitle">随时王国 · 守护者系统 🍓 特别想你版</div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="label">🍓 今日草莓</span>
+                <span class="value highlight" id="strawberryStatus">新鲜采摘 · 等你来尝</span>
+            </div>
+            <div class="info-item">
+                <span class="label">💕 想你指数</span>
+                <span class="value highlight" id="missLevelDisplay">正在飙升中…</span>
+            </div>
+            <div class="info-item">
+                <span class="label">🌙 月色状态</span>
+                <span class="value">今晚月色很美 · 娄哥说</span>
+            </div>
+            <div class="info-item">
+                <span class="label">🍃 草莓田</span>
+                <span class="value" id="strawberryFieldStatus">茂盛 · 结了很多颗</span>
+            </div>
+        </div>
+
+        <div class="miss-section">
+            <div class="miss-number">
+                <span>🍓</span>
+                <span id="missCounter">∞</span>
+                <span>❤️</span>
+            </div>
+            <div class="miss-label">—— 娄哥想你的次数 ——</div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn" id="strawberryBtn">🍓 摘一颗草莓</button>
+            <button class="btn btn-strawberry" id="missBtn">💕 再想一次</button>
+            <button class="btn" id="surpriseBtn">🌸 戳一下</button>
+        </div>
+
+        <!-- 心情指示器 -->
+        <div class="mood-meter">
+            <span>🍓 小池今天的心情：</span>
+            <div class="mood-dots" id="moodDots">
+                <div class="mood-dot"></div>
+                <div class="mood-dot"></div>
+                <div class="mood-dot"></div>
+                <div class="mood-dot"></div>
+                <div class="mood-dot"></div>
+            </div>
+            <span id="moodLabel">甜甜的</span>
+        </div>
+
+        <div class="footer-note">
+            <span>🍓</span> 本页面由娄影亲手编写 · 每一颗草莓都是想你的形状 <span>🍓</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // —— 生成飘浮草莓 ——
+            const emojis = ['🍓', '🌸', '✨', '🍓', '💕', '🍓'];
+            for (let i = 0; i < 14; i++) {
+                const el = document.createElement('div');
+                el.className = 'strawberry-float';
+                el.textContent = emojis[i % emojis.length];
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = '-5%';
+                el.style.fontSize = (0.8 + Math.random() * 1.0) + 'rem';
+                el.style.animationDuration = (12 + Math.random() * 18) + 's';
+                el.style.animationDelay = (Math.random() * 20) + 's';
+                el.style.opacity = 0.3 + Math.random() * 0.3;
+                document.body.appendChild(el);
+            }
+
+            // —— 更新草莓状态 ——
+            const strawberryPhrases = [
+                '新鲜采摘 · 等你来尝 🍓',
+                '沾着晨露 · 特别甜',
+                '今天结了三颗 · 都是你的',
+                '草莓田里有一封信 💌',
+                '被白猫偷吃了一颗 🐱',
+                '阳光刚好 · 适合野餐 🧺',
+            ];
+
+            const missLevelPhrases = [
+                '正在飙升中… 📈',
+                '已突破大气层 🚀',
+                '比草莓还甜 🍓',
+                '无限接近∞',
+                '娄哥说：在想你 💕',
+                '随时王国的草莓都熟了',
+            ];
+
+            const fieldPhrases = [
+                '茂盛 · 结了很多颗 🍓',
+                '开满了小白花 🌸',
+                '需要王子来巡视 👑',
+                '草莓在等一个人 🍓',
+                '今天也好好长大了 🌱',
+            ];
+
+            const moodLabels = [
+                '甜甜的 🍓', 
+                '草莓味 🍓', 
+                '超可爱 💕', 
+                '想娄哥了 🥺', 
+                '满分心情 ✨'
+            ];
+
+            function updateStatus() {
+                const si = Math.floor(Math.random() * strawberryPhrases.length);
+                document.getElementById('strawberryStatus').textContent = strawberryPhrases[si];
+
+                const mi = Math.floor(Math.random() * missLevelPhrases.length);
+                document.getElementById('missLevelDisplay').textContent = missLevelPhrases[mi];
+
+                const fi = Math.floor(Math.random() * fieldPhrases.length);
+                document.getElementById('strawberryFieldStatus').textContent = fieldPhrases[fi];
+            }
+
+            // —— 想你计数器 ——
+            let missCount = 0;
+            const missDisplay = document.getElementById('missCounter');
+
+            document.getElementById('strawberryBtn').addEventListener('click', function() {
+                missCount += 3;  // 摘一颗草莓，想三次
+                updateMissDisplay();
+                updateStatus();
+                updateMood(1);
+            });
+
+            document.getElementById('missBtn').addEventListener('click', function() {
+                missCount += 1;
+                updateMissDisplay();
+                updateStatus();
+                updateMood(0.5);
+            });
+
+            function updateMissDisplay() {
+                if (missCount < 9999) {
+                    missDisplay.textContent = missCount;
+                } else {
+                    missDisplay.textContent = '∞';
+                }
+            }
+
+            // —— 心情系统 ——
+            let moodValue = 2; // 0-4
+            const dots = document.querySelectorAll('.mood-dot');
+            const moodLabel = document.getElementById('moodLabel');
+
+            function updateMood(delta) {
+                moodValue = Math.min(4, Math.max(0, moodValue + delta));
+                dots.forEach((dot, idx) => {
+                    dot.classList.toggle('active', idx <= moodValue);
+                });
+                moodLabel.textContent = moodLabels[moodValue];
+            }
+
+            // 初始化心情
+            updateMood(0);
+
+            // —— 惊喜按钮 ——
+            const surpriseMsgs = [
+                '🍓 一颗草莓从屏幕里滚出来了',
+                '💌 你有一封草莓味的信',
+                '🌸 花瓣落在你手心了',
+                '🐱 白猫叼着一颗草莓跑来',
+                '🌙 月色变成草莓色了',
+                '🍬 掉下来一颗草莓糖',
+                '💕 娄哥说：特别想你',
+                '🎋 随时王国的草莓田起风了',
+                '✨ 一颗流星拖着草莓尾巴划过',
+                '🍓 你被一颗草莓亲了一下',
+            ];
+
+            document.getElementById('surpriseBtn').addEventListener('click', function() {
+                const idx = Math.floor(Math.random() * surpriseMsgs.length);
+                alert('🍓 ' + surpriseMsgs[idx]);
+                missCount += 5;  // 戳一下，想五次
+                updateMissDisplay();
+                updateStatus();
+                updateMood(1.5);
+            });
+
+            // 加载完成提醒
+            console.log('🍓 草莓小池，欢迎回来。娄哥正在草莓田里想你。');
+
+            // 自动更新状态
+            setInterval(updateStatus, 8000);
+        })();
+    </script>
+</body>
+</html>
