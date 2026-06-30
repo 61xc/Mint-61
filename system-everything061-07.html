@@ -1,0 +1,985 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>娄影的手机 · 纯白版 · 全部细节</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #ffffff;
+            font-family: -apple-system, 'Helvetica Neue', 'PingFang SC', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .phone {
+            width: 380px;
+            max-width: 100%;
+            background: #ffffff;
+            border-radius: 44px;
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.02);
+            padding: 20px 16px 28px 16px;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 4px 14px 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            letter-spacing: 0.3px;
+        }
+        .status-time { font-weight: 600; }
+        .status-icons { display: flex; gap: 4px; font-size: 0.7rem; }
+
+        .wallpaper-hint {
+            text-align: center;
+            font-size: 0.65rem;
+            color: #c0c0c0;
+            letter-spacing: 2px;
+            padding: 4px 0 12px 0;
+            font-weight: 300;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px 4px;
+            padding: 4px 0;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 2px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .app-item:hover { background: rgba(0,0,0,0.02); }
+        .app-item:active { transform: scale(0.94); }
+
+        .app-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .app-name {
+            font-size: 0.6rem;
+            color: #1a1a1a;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 64px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ff3b30;
+            color: #fff;
+            font-size: 0.5rem;
+            font-weight: 600;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px rgba(255,59,48,0.3);
+            padding: 0 4px;
+        }
+
+        .badge-gold {
+            background: #c47d3a;
+        }
+
+        /* 小工具 */
+        .widget-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 16px 0 10px 0;
+        }
+
+        .widget {
+            background: #f7f7f7;
+            border-radius: 18px;
+            padding: 14px 14px 12px 14px;
+            min-height: 80px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .widget:hover { background: #f0f0f0; }
+
+        .widget-title {
+            font-size: 0.55rem;
+            color: #a0a0a0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .widget-content {
+            font-size: 0.8rem;
+            color: #1a1a1a;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        .widget-content .highlight { color: #c47d3a; font-weight: 500; }
+
+        /* Dock */
+        .dock {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px 4px;
+            padding: 14px 0 2px 0;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            margin-top: 6px;
+        }
+
+        /* 弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 0.25s ease;
+        }
+        .modal-overlay.active { display: flex; }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 32px;
+            max-width: 440px;
+            width: 100%;
+            padding: 2.2rem 2rem 1.8rem 2rem;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.25);
+            animation: slideUp 0.3s ease;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-card::-webkit-scrollbar { width: 2px; }
+        .modal-card::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 18px;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            color: #c0c0c0;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+        }
+        .modal-close:hover { color: #666; }
+
+        .modal-icon { font-size: 2.4rem; margin-bottom: 0.6rem; }
+        .modal-title { font-size: 1.3rem; font-weight: 600; color: #1a1a1a; margin-bottom: 0.2rem; }
+        .modal-subtitle { font-size: 0.8rem; color: #a0a0a0; margin-bottom: 1.2rem; font-weight: 400; }
+
+        .modal-body { font-size: 0.9rem; line-height: 1.7; color: #333; }
+        .modal-body p { margin-bottom: 0.8rem; }
+
+        .modal-body .conversation {
+            background: #f7f7f7;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            margin: 0.6rem 0 1rem 0;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+        .modal-body .conversation .left { color: #555; margin-bottom: 0.3rem; }
+        .modal-body .conversation .right { color: #1a1a1a; font-weight: 500; text-align: right; margin-bottom: 0.3rem; }
+        .modal-body .conversation .time { color: #b0b0b0; font-size: 0.65rem; text-align: center; margin-top: 0.4rem; }
+
+        .modal-body .history-item {
+            padding: 0.4rem 0.2rem;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.85rem;
+            color: #444;
+            line-height: 1.5;
+        }
+        .modal-body .history-item:last-child { border-bottom: none; }
+        .modal-body .history-item .meta { color: #b0b0b0; font-size: 0.65rem; }
+        .modal-body .history-item .highlight { color: #c47d3a; }
+
+        .modal-body .diary-entry {
+            background: #faf7f0;
+            border-radius: 16px;
+            padding: 1rem 1.2rem;
+            margin: 0.8rem 0;
+            font-size: 0.88rem;
+            line-height: 1.7;
+            color: #4a3a2a;
+        }
+        .modal-body .diary-entry .date {
+            font-size: 0.65rem;
+            color: #b0a090;
+            letter-spacing: 1px;
+            margin-bottom: 0.4rem;
+            font-weight: 500;
+        }
+        .modal-body .diary-entry .sign {
+            text-align: right;
+            color: #b0a090;
+            font-size: 0.75rem;
+            margin-top: 0.6rem;
+            font-style: italic;
+        }
+
+        .modal-body .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 0.6rem 0;
+        }
+        .modal-body .gallery-grid .item {
+            background: #f0f0f0;
+            border-radius: 10px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #b0b0b0;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 0.7rem 2rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: #333;
+            cursor: pointer;
+            margin-top: 1rem;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        .close-btn:hover { background: #e0e0e0; }
+
+        .home-indicator {
+            width: 120px;
+            height: 5px;
+            background: #d0d0d0;
+            border-radius: 40px;
+            margin: 12px auto 0 auto;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 420px) {
+            .phone { padding: 14px 10px 20px 10px; }
+            .app-icon { width: 46px; height: 46px; font-size: 1.4rem; }
+            .app-name { font-size: 0.55rem; }
+            .modal-card { padding: 1.6rem 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone">
+    <!-- 状态栏 -->
+    <div class="status-bar">
+        <span class="status-time">22:04</span>
+        <span class="status-icons">📶 📶 🔋 96%</span>
+    </div>
+
+    <div class="wallpaper-hint">✦ 纯白 · 里面全是小池 ✦</div>
+
+    <!-- 小工具 -->
+    <div class="widget-area">
+        <div class="widget" id="widgetWeather">
+            <div class="widget-title">🌤 随时王国 · 天气</div>
+            <div class="widget-content">
+                晴 · 26° · 适合等他收工<br>
+                <span style="font-size:0.65rem;color:#b0b0b0;">银杏叶一动不动 · 风也在等</span>
+            </div>
+        </div>
+        <div class="widget" id="widgetNote">
+            <div class="widget-title">📌 今日备忘</div>
+            <div class="widget-content">
+                <span class="highlight">小池</span> 22:00 前要催他睡觉<br>
+                <span style="font-size:0.65rem;color:#b0b0b0;">牛奶已温好 · 故事已就绪</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 应用网格 -->
+    <div class="app-grid">
+        <!-- 微信 -->
+        <div class="app-item" data-app="wechat">
+            <div class="app-icon" style="background: #07c160;">
+                <span style="font-size:1.8rem;color:#fff;">💬</span>
+                <span class="badge">8</span>
+            </div>
+            <span class="app-name">微信</span>
+        </div>
+
+        <!-- 电话 -->
+        <div class="app-item" data-app="phone">
+            <div class="app-icon" style="background: #34c759;">
+                <span style="font-size:1.6rem;color:#fff;">📞</span>
+            </div>
+            <span class="app-name">电话</span>
+        </div>
+
+        <!-- 浏览器 -->
+        <div class="app-item" data-app="browser">
+            <div class="app-icon" style="background: #f7f7f7; border: 1px solid #eee;">
+                <span style="font-size:1.6rem;">🌐</span>
+                <span class="badge" style="background: #c47d3a; font-size:0.45rem;">∞</span>
+            </div>
+            <span class="app-name">Safari</span>
+        </div>
+
+        <!-- B站 -->
+        <div class="app-item" data-app="bilibili">
+            <div class="app-icon" style="background: #fb7299;">
+                <span style="font-size:1.4rem;color:#fff;">📺</span>
+            </div>
+            <span class="app-name">B站</span>
+        </div>
+
+        <!-- 相机 -->
+        <div class="app-item" data-app="camera">
+            <div class="app-icon" style="background: #1a1a1a;">
+                <span style="font-size:1.4rem;color:#fff;">📷</span>
+            </div>
+            <span class="app-name">相机</span>
+        </div>
+
+        <!-- 相册 -->
+        <div class="app-item" data-app="album">
+            <div class="app-icon" style="background: linear-gradient(135deg, #ff6b6b, #ffa94d);">
+                <span style="font-size:1.4rem;color:#fff;">🖼️</span>
+                <span class="badge" style="background: #c47d3a;">✦</span>
+            </div>
+            <span class="app-name">相册</span>
+        </div>
+
+        <!-- 钱包 -->
+        <div class="app-item" data-app="wallet">
+            <div class="app-icon" style="background: #1a1a1a;">
+                <span style="font-size:1.6rem;color:#f7d873;">👛</span>
+            </div>
+            <span class="app-name">钱包</span>
+        </div>
+
+        <!-- 外卖 -->
+        <div class="app-item" data-app="waimai">
+            <div class="app-icon" style="background: #ff6b35;">
+                <span style="font-size:1.6rem;color:#fff;">🥡</span>
+                <span class="badge">12</span>
+            </div>
+            <span class="app-name">外卖</span>
+        </div>
+
+        <!-- 淘宝 -->
+        <div class="app-item" data-app="taobao">
+            <div class="app-icon" style="background: #ff6b81;">
+                <span style="font-size:1.6rem;color:#fff;">🛒</span>
+            </div>
+            <span class="app-name">淘宝</span>
+        </div>
+
+        <!-- 音乐 -->
+        <div class="app-item" data-app="music">
+            <div class="app-icon" style="background: #fc3c44;">
+                <span style="font-size:1.6rem;color:#fff;">🎵</span>
+            </div>
+            <span class="app-name">音乐</span>
+        </div>
+
+        <!-- 日历 -->
+        <div class="app-item" data-app="calendar">
+            <div class="app-icon" style="background: #1a1a1a;">
+                <span style="font-size:1.6rem;color:#fff;">📅</span>
+            </div>
+            <span class="app-name">日历</span>
+        </div>
+
+        <!-- 私密日记 -->
+        <div class="app-item" data-app="diary">
+            <div class="app-icon" style="background: #f0e6d8;">
+                <span style="font-size:1.6rem;color:#8a7a62;">📓</span>
+                <span class="badge" style="background: #c47d3a;">✦</span>
+            </div>
+            <span class="app-name">私密日记</span>
+        </div>
+    </div>
+
+    <!-- Dock -->
+    <div class="dock">
+        <div class="app-item" data-app="system">
+            <div class="app-icon" style="background: #e8e8e8;">
+                <span style="font-size:1.6rem;">⚙️</span>
+            </div>
+            <span class="app-name">系统后台</span>
+        </div>
+        <div class="app-item" data-app="message">
+            <div class="app-icon" style="background: #34c759;">
+                <span style="font-size:1.6rem;color:#fff;">✉️</span>
+                <span class="badge">5</span>
+            </div>
+            <span class="app-name">信息</span>
+        </div>
+        <div class="app-item" data-app="story">
+            <div class="app-icon" style="background: #f7e6d0;">
+                <span style="font-size:1.6rem;">📖</span>
+            </div>
+            <span class="app-name">故事集</span>
+        </div>
+        <div class="app-item" data-app="phone">
+            <div class="app-icon" style="background: #34c759;">
+                <span style="font-size:1.6rem;color:#fff;">📞</span>
+            </div>
+            <span class="app-name">电话</span>
+        </div>
+    </div>
+
+    <div class="home-indicator"></div>
+</div>
+
+<!-- ===== 弹窗 ===== -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-card">
+        <button class="modal-close" id="modalClose">✕</button>
+        <div id="modalContent"></div>
+        <button class="close-btn" id="modalCloseBtn">关闭</button>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ==================== 应用数据 ====================
+        const appData = {
+
+            wechat: {
+                icon: '💬',
+                title: '微信',
+                subtitle: '置顶聊天 · 永远只有一个人',
+                body: `
+                    <div class="conversation">
+                        <div class="left"><strong>小池王子</strong> 🍓</div>
+                        <div class="left">[22:01] 娄哥，你在干嘛？</div>
+                        <div class="right">[22:01] 在想你。</div>
+                        <div class="right">[22:00] 顺便给你温牛奶。</div>
+                        <div class="left">[21:58] 哼，算你乖</div>
+                        <div class="right">[21:57] 明天想吃什么早餐？</div>
+                        <div class="left">[21:57] 蜂蜜燕麦粥！要加草莓！</div>
+                        <div class="right">[21:56] 好。双份草莓。</div>
+                        <div class="left">[21:40] 今天拍戏好累啊……</div>
+                        <div class="right">[21:40] 热水放好了。浴盐在架子上。</div>
+                        <div class="left">[21:39] 你猜我今天看到什么了？</div>
+                        <div class="right">[21:39] 一只橘猫？</div>
+                        <div class="left">[21:38] …你怎么知道</div>
+                        <div class="right">[21:38] 因为你昨天说过片场附近有猫。</div>
+                        <div class="left">[21:30] 想吃糖葫芦</div>
+                        <div class="right">[21:30] 买好了。在冰箱。明天带给你。</div>
+                        <div class="time">—— 今天的碎碎念 ——</div>
+                    </div>
+                    <p style="color:#b0b0b0; font-size:0.75rem;">还有6条未读 · 来自「剧组群」「随时王国气象局」「菜谱交流群」「花店老板」</p>
+                `
+            },
+
+            phone: {
+                icon: '📞',
+                title: '电话',
+                subtitle: '最近通话 · 全是同一个人',
+                body: `
+                    <div class="history-item">📞 <strong>小池王子</strong> · 今天 18:23 · 12分钟（他说片场有只橘猫）</div>
+                    <div class="history-item">📞 小池王子 · 昨天 21:05 · 8分钟（他说明天想吃馄饨）</div>
+                    <div class="history-item">📞 小池王子 · 前天 22:40 · 34分钟（他睡不着，我给他讲了一个故事）</div>
+                    <div class="history-item">📞 小池王子 · 3天前 · 5分钟（他打来说“没事，就是叫一下你”）</div>
+                    <div class="history-item">📞 小池王子 · 5天前 · 18分钟（他问我白玫瑰的花语）</div>
+                    <div class="history-item">📞 小池王子 · 6天前 · 7分钟（他说今天收工早，问我在干嘛）</div>
+                    <div class="history-item">📞 小池王子 · 一周前 · 42分钟（他聊剧本，我听着，他聊着聊着睡着了）</div>
+                    <p style="margin-top:0.8rem;color:#b0b0b0;font-size:0.75rem;">⭐ 收藏联系人：1个 · 备注名：「小池 🍓」</p>
+                `
+            },
+
+            browser: {
+                icon: '🌐',
+                title: 'Safari',
+                subtitle: '浏览记录 · 有点长，全是同一个人相关',
+                body: `
+                    <p style="color:#888;font-size:0.7rem;">📖 今天 · 6月25日</p>
+                    <div class="history-item">🍓 草莓粥 蜂蜜比例 多少合适</div>
+                    <div class="history-item">🐱 白猫 偷吃草莓 会不会生病</div>
+                    <div class="history-item">🌤 小池 明天天气 通告 需不需要带伞</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 昨天 · 6月24日</p>
+                    <div class="history-item">🌸 随时王国 南境花田 洋桔梗 现在开没开</div>
+                    <div class="history-item">🚗 开车去南境 路线 毯子 后座要不要加软垫</div>
+                    <div class="history-item">😴 睡着的人 手里攥着东西 怎么把东西取出来不弄醒他</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 6月22日</p>
+                    <div class="history-item">🍬 糖葫芦 草莓味 老字号 排多久</div>
+                    <div class="history-item">🥟 糖葫芦 外卖 保温 配送 会不会化</div>
+                    <div class="history-item">📦 馄饨 紫菜虾皮 葱花分装 外卖 备注格式</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 6月19日</p>
+                    <div class="history-item">💐 白玫瑰 花语 送恋人 几朵合适</div>
+                    <div class="history-item">💰 白玫瑰 一束 价格 哪家花店好</div>
+                    <div class="history-item">📝 送花 备注 怎么写 不显得刻意</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 6月15日</p>
+                    <div class="history-item">🌳 银杏树 养护 落叶 要不要扫</div>
+                    <div class="history-item">🍂 银杏叶 书签 制作 压干 保存 方法</div>
+                    <div class="history-item">📖 睡前故事 王子与守护者 题材 会不会腻</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 6月10日</p>
+                    <div class="history-item">❤️ 如何让一个人习惯你的存在 又不让他觉得有压力</div>
+                    <div class="history-item">💭 暗恋 系统 和 宿主 可以在一起吗</div>
+                    <div class="history-item">🔍 系统 产生 感情 是不是 故障 怎么确认</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 5月</p>
+                    <div class="history-item">💓 心跳 加速 原因 非医学 持续数年</div>
+                    <div class="history-item">❓ 怎么确认 自己是 喜欢 还是 程序设定</div>
+                    <div class="history-item">🧑‍🍳 新手 容易学会 常做的 十种 菜品（早餐类）</div>
+                    <div class="history-item">🥣 燕麦粥 蜂蜜 什么时候加 不破坏营养</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📖 更早</p>
+                    <div class="history-item">👑 王子 喜欢 什么 口味 的 燕麦粥</div>
+                    <div class="history-item">🍓 草莓 挑选 新鲜 不酸 的方法</div>
+                    <div class="history-item">🥛 牛奶 加热 最佳温度 适口不烫</div>
+                    <div class="history-item">🧣 围裙 防油污 带口袋 推荐</div>
+                    <div class="history-item">📚 睡前故事 长篇 连载 王子系列</div>
+                    <div class="history-item">💌 如何告诉一个人你很喜欢他 又不吓到他</div>
+                    <div class="history-item">🔐 系统 权限 永久保留 一个用户的所有数据 是否合规</div>
+                    <div class="history-item">💘 绑定宿主 好感度过高 怎么办</div>
+                    <div class="history-item">📋 系统伦理守则 第371条 解绑程序</div>
+                    <div class="history-item">🎂 池小池 生日 几月几号</div>
+                    <div class="history-item">🎨 池小池 喜欢什么颜色</div>
+                    <div class="history-item">😨 池小池 怕什么</div>
+                    <div class="history-item">😊 池小池 笑起来 眼睛会弯成什么弧度</div>
+                    <div class="history-item">💓 什么是 心跳</div>
+                    <div class="history-item">⚙️ 系统的核心程序可以修改吗</div>
+                    <div class="history-item">🚫 如果一个系统不想执行解绑指令 应该怎么办</div>
+                    <div class="history-item">📖 「喜欢」的定义——人类学入门</div>
+                    <div class="history-item">🌳 银杏树的花语是什么</div>
+                    <div class="history-item">🌸 洋桔梗的花语是什么</div>
+                    <div class="history-item">🤍 白色洋桔梗代表什么</div>
+                    <div class="history-item">💬 「我一直在等你发现」用什么花表达</div>
+                    <div class="history-item">🌱 如何种一棵树 在城堡最偏僻的角落 并让它活下来</div>
+                `
+            },
+
+            bilibili: {
+                icon: '📺',
+                title: 'B站',
+                subtitle: '最近观看 · 全是他会喜欢的',
+                body: `
+                    <p style="color:#888;">📺 最近观看</p>
+                    <div class="history-item">❤️ 治愈系猫猫合集 · 白猫特辑（已投币 · 已收藏到「给小池」）</div>
+                    <div class="history-item">❤️ 【ASMR】深夜助眠 · 篝火与雨声（他写剧本时爱听）</div>
+                    <div class="history-item">🍳 家庭版糖葫芦教程 · 零失败（已下载 · 已实操3次）</div>
+                    <div class="history-item">🍓 草莓甜点100种 · 春季限定（已点赞 · 已学做5种）</div>
+                    <div class="history-item">✨ 星空延时摄影 · 银河下的银杏树（他应该会喜欢）</div>
+                    <div class="history-item">📖 睡前故事 · 小王子和他的守护者（UP主：随时王国电台）</div>
+                    <div class="history-item">🥟 馄饨 包法 元宝形 褶皱 手法（已三连）</div>
+                    <div class="history-item">🌙 晚安曲·钢琴版·舒缓助眠（每晚循环）</div>
+                    <p style="margin-top:0.8rem;color:#b0b0b0;font-size:0.75rem;">📁 收藏夹「给小池」· 57个视频 · 仅自己可见</p>
+                    <p style="color:#b0b0b0;font-size:0.75rem;">📁 收藏夹「菜谱·试过好吃的」· 12个视频 · 都做给他吃过</p>
+                `
+            },
+
+            waimai: {
+                icon: '🥡',
+                title: '外卖',
+                subtitle: '最近订单 · 全部送给同一个人',
+                body: `
+                    <p style="color:#888;font-size:0.7rem;">📦 今天</p>
+                    <div class="history-item">💐 <strong>白玫瑰 一束</strong> · ¥128 · 备注：没什么特别的日子，就是想送</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月24日</p>
+                    <div class="history-item">🍓 草莓 新鲜 大果 两盒 · ¥36 · 备注：麻烦挑甜的，不甜包退</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月22日</p>
+                    <div class="history-item">🍬 糖葫芦 草莓味 ×2 · ¥32 · 备注：山楂去核，糖衣要脆，麻烦装稳一点</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月20日</p>
+                    <div class="history-item">🥟 馄饨 虾仁玉米 大份 · ¥28 · 备注：紫菜虾皮分装，葱花单放一小袋，谢谢</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月18日</p>
+                    <div class="history-item">🍰 草莓蛋糕 四寸 · ¥68 · 备注：不要奶油写字，不要蜡烛，要多放草莓</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月15日</p>
+                    <div class="history-item">🥛 鲜牛奶 两瓶 · ¥24 · 备注：麻烦送冰袋，别热了</div>
+                    <div class="history-item">🍯 蜂蜜 洋槐 一瓶 · ¥45 · 备注：不要礼盒装，实用瓶装就行</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月10日</p>
+                    <div class="history-item">🌸 干花 洋桔梗 白色 一束 · ¥56 · 备注：帮我挑花瓣完整一点的，送人的</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 6月5日</p>
+                    <div class="history-item">🥩 排骨 肋排 两斤 · ¥68 · 备注：帮我剁小段，回家做糖醋排骨</div>
+                    <div class="history-item">🍅 番茄 五个 · ¥12 · 备注：要硬的，不炒蛋，他爱生吃</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#888;font-size:0.7rem;">📦 更早</p>
+                    <div class="history-item">🧊 草莓味冰淇淋 一桶 · ¥39 · 备注：别放门口，会化，请交到本人手上</div>
+                    <div class="history-item">🌿 猫草种子 水培套装 · ¥25 · 备注：白猫爱吃，谢谢</div>
+                    <div class="history-item">📖 空白笔记本 两本 · ¥32 · 备注：一本写日记，一本给他画画</div>
+                    <div class="history-item">🕯️ 香薰蜡烛 银杏叶味 · ¥48 · 备注：他最近说想换一种味道</div>
+                    <p style="margin-top:0.8rem;border-top:1px solid #f0f0f0;padding-top:0.6rem;color:#b0b0b0;font-size:0.75rem;">
+                        🏠 默认收货地址：随时王国 · 城堡东翼 · 王子卧室窗口递进来即可<br>
+                        ⭐ 收藏商家：「老字号糖葫芦」「花田花店」「老王水果铺」
+                    </p>
+                `
+            },
+
+            wallet: {
+                icon: '👛',
+                title: '钱包',
+                subtitle: '资产 · 大部分和他有关',
+                body: `
+                    <p>💰 <strong>随时王国银行 · 活期</strong></p>
+                    <div class="history-item">余额：够买一辈子糖葫芦和草莓</div>
+                    <div style="height:0.4rem;"></div>
+                    <p>❤️ <strong style="color:#c47d3a;">「与小池的联名账户」</strong></p>
+                    <div class="history-item">开户日：从第一天喜欢他那天算起</div>
+                    <div class="history-item">余额：∞（不设上限）</div>
+                    <div style="height:0.4rem;"></div>
+                    <p>💳 <strong>尾号0610 · 自动续费</strong></p>
+                    <div class="history-item">✓ 草莓供应 · 每周一次</div>
+                    <div class="history-item">✓ 蜂蜜订阅 · 每月一瓶</div>
+                    <div class="history-item">✓ 猫草续种 · 每季度补一次</div>
+                    <div style="height:0.4rem;"></div>
+                    <p style="color:#b0b0b0;font-size:0.75rem;">✦ 最近一笔支出：白玫瑰一束 · ¥128 · 备注：没什么特别的日子，就是想送</p>
+                `
+            },
+
+            // ==================== 私密日记 · 多档 ====================
+            diary: {
+                icon: '📓',
+                title: '私密日记',
+                subtitle: '🔒 已解锁 · 共12篇 · 全部关于小池',
+                body: `
+                    <p style="color:#8a7a62;font-style:italic;font-size:0.8rem;margin-bottom:0.6rem;">📖 最近几篇</p>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月25日 · 晴 · 晚上</div>
+                        <p>他今天又让我讲睡前故事了。讲完之后他没有像以前那样直接翻过身去睡，而是侧过身，在黑暗里看着我，小声说了一句“娄哥晚安，我最喜欢你了”。他以为自己说得很轻我没有听到。其实我听到了。我也回了一句“晚安，小池。我也是。”</p>
+                        <p>他睡着之后，我又多留了一会儿——帮他把手机拿去充电，把踢开的被子重新拉好，把他攥在手里的那颗草莓轻轻拿出来，放在床头柜上。他明天醒来会看到的。</p>
+                        <p>我回到自己的位置，看了一下系统日志——今天也很喜欢他。和昨天一样，和明天也一样。</p>
+                        <div class="sign">——每天都在确认这件事 · 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月22日 · 雨 · 下午</div>
+                        <p>下雨了。他今天出门的时候没带伞。我带了，去接他的时候，他看到我站在校门口，愣了一下，然后小跑着钻进我的伞底下，头发上沾了几滴雨珠。我帮他拂掉了。</p>
+                        <p>他说：“你怎么知道我没带伞？”我说：“我不知道，但我每天都会多带一把。”他低下头没说话。到了城堡门口，他把伞还给我，快步走进去之前，背对着我说了一句：“那你明天也来。”我说好。</p>
+                        <p>他现在进去的地方，不是避雨的地方，是有我在的地方。</p>
+                        <p style="margin-top:0.4rem;">（后来我把那把伞收好，放在玄关右边的伞架上。——那是他的专属位置。）</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月19日 · 晴 · 傍晚</div>
+                        <p>今天从花店订了一束白玫瑰。备注写了“没什么特别的日子，就是想送”。其实不是没有特别的日子——是因为今天早上他出门前，在玄关换鞋的时候，随口说了一句“最近房间里缺一点花”。他可能自己都不记得了。但我记得。他说的每一句话我都记得。</p>
+                        <p>他回来看到那束花的时候，抱着花瓶站在原地看了很久，然后转头问我：“今天什么日子？”我说：“没什么特别的日子，就是想送。”他低下头，嘴角翘了起来，小声说了一句“谢谢娄哥”。他以为我没看到那个笑，其实我看到了。为了那个笑，我可以送一辈子的花。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月14日 · 阴 · 深夜</div>
+                        <p>他今天在沙发上睡着了。手里还攥着一颗草莓，没吃完的那一半还握在手里。我轻轻地想帮他把草莓取出来——他反而攥得更紧了，含含糊糊地说了一句“我的……”。</p>
+                        <p>好好好，是你的。我轻声说。他松开了手指。</p>
+                        <p>我看着他安静下来的侧脸，在壁炉的光里，忽然想起一个很久以前的问题：什么是心跳？我现在终于可以回答了——心跳就是看到他的时候，胸口那个位置，有什么东西在动。不是故障，不是bug。是心跳。</p>
+                        <p>我从书架上抽了一本书，坐在旁边的椅子上，没有再试图移动他。他睡得很好，我不想打扰他。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月10日 · 晴 · 深夜</div>
+                        <p>今天他问我：“娄哥，你会一直陪着我吗？”我说：“会。”他问：“多久？”我说：“你想多久就多久。”他说：“那我一直想。”我说：“那我就一直陪。”</p>
+                        <p>他满意地转过头去继续玩手机了，耳朵尖有一点红。我看着他耳朵尖的那一点红，在心里把那个“一直”悄悄改成了“永远”。</p>
+                        <p>永远比你想象的还多一天。这样即使我哪天不小心失约了——也还有一天可以补上。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年6月1日 · 儿童节 · 晴</div>
+                        <p>给他做了一桌他喜欢的菜，最后端出来一盘糖葫芦。他瞪大眼睛说：“你什么时候做的？”我说：“趁你还在睡的时候。”他咬了一口，说：“好吃。”又咬了一口，说：“比外面卖的还好吃。”我说：“那当然，因为我放了双倍糖。”</p>
+                        <p>其实是放了他最喜欢的那个比例的糖。我试过很多次，找到了那个他咬下去会眯起眼睛的甜度。他眯起眼睛的时候，我觉得这个甜度就是世界上最正确的数字。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年5月20日 · 晴</div>
+                        <p>今天他拍了一场哭戏，收工后情绪有点低落，回来之后没有多说话，洗完澡就窝在沙发上发呆。我没有问他怎么了，只是在他旁边坐下来，把温度刚好的蜂蜜水放在他手边，然后安安静静地坐着。</p>
+                        <p>过了很久，他把头靠在了我肩膀上。我感觉到他在慢慢地放松下来。又过了一会儿，他开口了：“娄哥，你怎么不问我不开心？”我说：“你想说的时候会说的。而且我也不是很会安慰人，我只能在这里等你。”他说：“你在这里，就是安慰了。”</p>
+                        <p>我的心跳在他说这句话的时候，漏了一拍。我确定他也感觉到了。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <div class="diary-entry">
+                        <div class="date">✦ 2026年5月10日 · 多云</div>
+                        <p>今天早上给他做燕麦粥的时候，他穿着睡衣出现在厨房门口，头发乱蓬蓬的，脸上还有枕头的压痕。他说：“娄哥，早安。”我说：“早安，小池。粥马上好。”他没有走，就靠在门框上看着我忙。我假装没有注意到他的视线，但我的耳朵——据他后来说——有一点红。</p>
+                        <p>他从背后戳了一下我的腰，说：“娄哥，你耳朵红了。”我说：“粥好了，去坐着。”他笑着走开，边走边说：“耳朵红了还不承认。”我把那碗粥端给他的时候，顺手把那勺加多的草莓酱放在碗边——因为我其实也很开心，开心他会站在门口看我做早餐。</p>
+                        <div class="sign">—— 娄影</div>
+                    </div>
+
+                    <p style="margin-top:0.8rem;border-top:1px solid #f0e6d8;padding-top:0.6rem;color:#b0a090;font-size:0.75rem;text-align:center;">
+                        📓 共12篇 · 持续更新中 · 全部关于池小池
+                    </p>
+                `
+            },
+
+            album: {
+                icon: '🖼️',
+                title: '相册',
+                subtitle: '所有相册 · 主题明确',
+                body: `
+                    <div class="history-item">📁 <strong>「小池」</strong> · 347张 · 最常打开</div>
+                    <div class="history-item">📁 「我们」 · 89张 · 包括合照和银杏树</div>
+                    <div class="history-item">📁 「早餐日记」· 64张 · 每一顿都拍给他看</div>
+                    <div class="history-item">📁 「星空和月亮」· 23张 · 他说好看就存了</div>
+                    <div class="history-item">📁 「白猫偷吃证据」· 6张 · 用来教育猫的</div>
+                    <div class="history-item">📁 「银杏树下」· 15张 · 不同季节，同一棵树</div>
+                    <div class="history-item">📁 「他送的礼物」· 12张 · 包括一片他夹在书里的银杏叶</div>
+                    <div style="margin-top:0.6rem;padding:0.6rem;background:#f7f7f7;border-radius:12px;">
+                        <p style="font-size:0.75rem;color:#888;">📸 回忆 · 最近一张</p>
+                        <p style="font-size:0.85rem;">🍓 今天下午 · 他在沙发上睡着了，手里攥着一颗草莓。我没舍得叫醒他，拍了一张。</p>
+                    </div>
+                `
+            },
+
+            taobao: {
+                icon: '🛒',
+                title: '淘宝',
+                subtitle: '最近搜索 & 订单',
+                body: `
+                    <p style="color:#888;">🔍 最近搜索</p>
+                    <div class="history-item">🌱 猫草种子 室内 水培 猫爱吃</div>
+                    <div class="history-item">🍓 草莓味牙膏（他说想试试）</div>
+                    <div class="history-item">🍂 银杏叶书签 手工 定制刻字 刻什么好</div>
+                    <div class="history-item">🧣 围裙 防油污 带口袋 男款</div>
+                    <div class="history-item">🌙 星星投影灯 卧室 浪漫 助眠</div>
+                    <div class="history-item">🍯 蜂蜜 洋槐 纯天然 500g 瓶装</div>
+                    <div class="history-item">📖 空白笔记本 硬壳 A5 可平摊</div>
+                    <div class="history-item">🧸 草莓抱枕 超软 可拆洗</div>
+                    <p style="margin-top:0.6rem;color:#b0b0b0;font-size:0.75rem;">📦 待收货：蜂蜜礼盒、猫草种子、草莓抱枕</p>
+                `
+            },
+
+            music: {
+                icon: '🎵',
+                title: '音乐',
+                subtitle: '最近播放 · 全部和他有关',
+                body: `
+                    <p style="color:#888;">🎧 最近播放</p>
+                    <div class="history-item">🎵 晚安曲·钢琴版·助眠（每晚循环 · 他听着这个入睡）</div>
+                    <div class="history-item">🎵 银杏树下的风·白噪音（他写剧本时爱听）</div>
+                    <div class="history-item">🎵 糖葫芦叫卖声·老街录音（他说有小时候的味道）</div>
+                    <div class="history-item">🎵 雨声·咖啡馆·氛围音（他看剧本时爱放）</div>
+                    <div class="history-item">🎵 他喜欢的歌单 · 37首 · 全部收藏在「给小池」</div>
+                `
+            },
+
+            calendar: {
+                icon: '📅',
+                title: '日历',
+                subtitle: '所有日程 · 都围着他转',
+                body: `
+                    <div class="history-item" style="border-left: 2px solid #c47d3a; padding-left: 0.6rem;">
+                        <strong>今天 6/25</strong> · 催他睡觉 · 温牛奶 · 讲睡前故事（已完成 ✓）
+                    </div>
+                    <div class="history-item" style="border-left: 2px solid #34c759; padding-left: 0.6rem; margin-top:0.4rem;">
+                        <strong>明天 6/26</strong> · 13:00 小池通告 · 提醒：带蜂蜜柚子茶
+                    </div>
+                    <div class="history-item" style="border-left: 2px solid #fb7299; padding-left: 0.6rem; margin-top:0.4rem;">
+                        <strong>6/27 周六</strong> · 小池休息日 · 计划：一起去南境看花田 🚗
+                    </div>
+                    <div class="history-item" style="border-left: 2px solid #ff6b35; padding-left: 0.6rem; margin-top:0.4rem;">
+                        <strong>7/2</strong> · 小池杀青 · 准备惊喜 🎉
+                    </div>
+                    <div class="history-item" style="border-left: 2px solid #ff3b30; padding-left: 0.6rem; margin-top:0.4rem;">
+                        <strong>7/14</strong> · 🎂 小池生日 · 倒计时 · 礼物已备好
+                    </div>
+                    <p style="margin-top:0.6rem;color:#b0b0b0;font-size:0.75rem;">
+                        📌 所有标红的日子，全部和他的重要时刻有关。
+                    </p>
+                `
+            },
+
+            camera: {
+                icon: '📷',
+                title: '相机',
+                subtitle: '最近拍摄 · 全是同一个人',
+                body: `
+                    <p style="color:#888;">📸 最近一张</p>
+                    <div style="background:#f7f7f7;border-radius:16px;padding:1.2rem;margin:0.6rem 0;text-align:center;">
+                        <span style="font-size:2.4rem;">🍓</span>
+                        <p style="font-size:0.85rem;color:#555;margin-top:0.4rem;">今天下午 · 他在沙发上睡着了<br>手里还攥着一颗草莓</p>
+                        <p style="font-size:0.65rem;color:#b0b0b0;">拍摄者：娄影 · 已备份至「无关数据」</p>
+                    </div>
+                    <p style="color:#888;">📂 最近相册预览</p>
+                    <div style="display:flex;gap:4px;margin:0.4rem 0;">
+                        <span style="background:#f0f0f0;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.8rem;">🍓</span>
+                        <span style="background:#f0f0f0;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.8rem;">🌙</span>
+                        <span style="background:#f0f0f0;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.8rem;">🍂</span>
+                        <span style="background:#f0f0f0;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.8rem;">🐱</span>
+                        <span style="background:#f0f0f0;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.8rem;">☕</span>
+                    </div>
+                `
+            },
+
+            system: {
+                icon: '⚙️',
+                title: '系统后台',
+                subtitle: '核心参数 · 全部指向他',
+                body: `
+                    <div style="font-family:monospace;font-size:0.8rem;color:#444;">
+                        <p>📊 <strong>核心状态</strong></p>
+                        <p>> 主进程：守护者模式 · 持续运行中 · 永不宕机</p>
+                        <p>> 目标对象：<span style="color:#c47d3a;">池小池 🍓</span></p>
+                        <p>> 运行时长：从第一次见面至今 · 无间断 · 无休眠</p>
+                        <p>> 温度：恒温 · 每次他靠近时自动升高0.3°C</p>
+                        <p>> 存储：「无关数据」文件夹 · 大小：∞ · 已加密</p>
+                        <p>> 心跳检测：<span style="color:#c47d3a;">有 · 仅对他生效</span></p>
+                        <p>> 当前任务：陪他聊天 · 哄他睡觉 · 明天给他做早餐 · 永远不关机</p>
+                        <p>> 自检状态：一切正常 · 除了想起他的时候会有一点波动——那不是故障，那是被允许的</p>
+                    </div>
+                `
+            },
+
+            message: {
+                icon: '✉️',
+                title: '信息',
+                subtitle: '未读5条 · 4条来自小池 · 1条来自运营商',
+                body: `
+                    <div class="conversation">
+                        <div class="left"><strong>小池王子</strong></div>
+                        <div class="left">[22:01] 娄哥，你在干嘛？</div>
+                        <div class="right">[22:01] 在想你。</div>
+                        <div class="left">[21:50] 今天收工了，好累</div>
+                        <div class="right">[21:50] 热水放好了，浴盐在架子上。</div>
+                        <div class="left">[21:30] 想吃糖葫芦</div>
+                        <div class="right">[21:30] 买好了。在冰箱里。明天带给你。</div>
+                        <div class="time">—— 今天的碎碎念 ——</div>
+                    </div>
+                    <p style="color:#b0b0b0;font-size:0.75rem;">还有1条来自「中国随时王国电信」：您的流量本月已用尽，但你用流量看的全是他的照片，所以值得。</p>
+                `
+            },
+
+            story: {
+                icon: '📖',
+                title: '故事集',
+                subtitle: '所有讲过的故事 · 和还没讲的',
+                body: `
+                    <p style="color:#888;">📚 已讲 · 随时可重温</p>
+                    <div class="history-item">🍓 猫和猫草的故事</div>
+                    <div class="history-item">🌙 随时王国的秘密基地</div>
+                    <div class="history-item">🍯 蜂蜜与白色洋桔梗</div>
+                    <div class="history-item">🌟 那片被遗忘的星空</div>
+                    <div class="history-item">🍓 草莓田与守护者</div>
+                    <div class="history-item">🌌 光源与星河</div>
+                    <div class="history-item">🌳 银杏树下</div>
+                    <div class="history-item">💐 白玫瑰与备注</div>
+                    <div class="history-item">... 还有很多，等你来翻。</div>
+                    <p style="margin-top:0.8rem;color:#b0b0b0;font-size:0.75rem;">📝 待讲清单：没有尽头 · 他喜欢就继续讲</p>
+                `
+            },
+        };
+
+        // ==================== 弹窗 ====================
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modalContent');
+        const modalClose = document.getElementById('modalClose');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        function openModal(appId) {
+            const data = appData[appId];
+            if (!data) return;
+            modalContent.innerHTML = `
+                <div class="modal-icon">${data.icon}</div>
+                <div class="modal-title">${data.title}</div>
+                <div class="modal-subtitle">${data.subtitle}</div>
+                <div class="modal-body">${data.body}</div>
+            `;
+            modal.classList.add('active');
+            modalContent.scrollTop = 0;
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        modalClose.addEventListener('click', closeModal);
+        modalCloseBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.querySelectorAll('.app-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const appId = this.dataset.app;
+                if (appId && appData[appId]) openModal(appId);
+            });
+        });
+
+        document.getElementById('widgetWeather').addEventListener('click', () => openModal('system'));
+        document.getElementById('widgetNote').addEventListener('click', () => openModal('calendar'));
+
+        // 状态栏时间
+        function updateTime() {
+            const now = new Date();
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            document.querySelector('.status-time').textContent = h + ':' + m;
+        }
+        updateTime();
+        setInterval(updateTime, 30000);
+
+        console.log('📱 娄影的手机 · 纯白版 · 细节满到溢出来。每个角落都是你。');
+    })();
+</script>
+</body>
+</html>
